@@ -1,0 +1,27 @@
+name: watergah
+
+on:
+  schedule:
+    - cron: '0 */11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-free-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Free Token
+        run: |
+          curl -s "https://bluefrog.nextpanel.com/token" > lama
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add lama
+          git diff --staged --quiet || git commit -m "potato [$(date -u +%Y-%m-%dT%H:%M:%SZ)]"
+          git push
