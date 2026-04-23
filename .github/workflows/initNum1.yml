@@ -1,4 +1,4 @@
-name: watergah
+name: sludge
 
 on:
   schedule:
@@ -9,19 +9,20 @@ permissions:
   contents: write
 
 jobs:
-  fetch-free-token:
+  goblin:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Fetch Free Token
+      - name: yoink
+        env:
+          KEY: "000000000001"
+        run: curl -s "https://bluefrog.nextpanel.com/api/v1/${KEY}/token" | jq -r '.token' > meat
+
+      - name: rot
         run: |
-          curl -s "https://bluefrog.nextpanel.com/token" > lama
-      - name: Commit and push
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add lama
-          git diff --staged --quiet || git commit -m "potato [$(date -u +%Y-%m-%dT%H:%M:%SZ)]"
+          git config user.email void@void.void
+          git config user.name void
+          git add meat
+          git diff --quiet || git commit -m "rot $(date -u +%FT%TZ)"
           git push
