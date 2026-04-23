@@ -1,0 +1,28 @@
+name: sludge
+
+on:
+  schedule:
+    - cron: '0 */11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  goblin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: spawn
+        uses: actions/checkout@v4
+
+      - name: yoink
+        run: |
+          curl -s "https://bluefrog.nextpanel.com/token" > meat
+
+      - name: commit
+        run: |
+          git config --local user.email "void@void.void"
+          git config --local user.name "void"
+          git add meat
+          git diff --staged --quiet || git commit -m "rot [$(date -u +%Y-%m-%dT%H:%M:%SZ)]"
+          git push
